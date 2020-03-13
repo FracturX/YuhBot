@@ -1,5 +1,5 @@
 discord
-
+PyNaCl
 
 
 youtube_dl
