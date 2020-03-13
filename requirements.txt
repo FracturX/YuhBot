@@ -6,7 +6,6 @@ youtube_dl
 
 
 
-opus_api
 ffmpeg
 
 
