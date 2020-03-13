@@ -11,7 +11,7 @@ from pathlib import Path
 
 import asyncio
 
-
+import opus_api
 import ffmpeg
 
 import random
