@@ -286,6 +286,9 @@ async def queue(ctx, query):
 async def stop(ctx):
     await ctx.voice_client.disconnect()
     queues.clear()
+    Queue_infile = os.path.isdir("./Queue")
+    if Queue_infile is True:
+            shutil.rmtree("Queue")
 
 
 
