@@ -150,7 +150,7 @@ async def play(ctx, *, query):
                     if file.endswith(".mp3"):
                         os.rename(file, 'song.mp3')
 
-                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue(voice))
+                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
                 voice.source = discord.PCMVolumeTransformer(voice.source)
                 voice.source.volume = 0.40
                 queuelist.pop(-1)
@@ -216,7 +216,7 @@ async def play(ctx, *, query):
                         print(f"Renamed File: {file}\n")
                         os.rename(file, "song.mp3")
 
-                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue(ctx.voice_client))
+                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
                 voice.source = discord.PCMVolumeTransformer(voice.source)
                 voice.source.volume = 0.40
 
@@ -340,7 +340,7 @@ async def skip(ctx):
         if item.endswith(suffixes):
             os.remove(os.path.join(mydir, item))
     
-    check_queue(ctx.voice_client)
+    check_queue()
     ctx.send("Song skipped.")
 
 
