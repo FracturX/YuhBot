@@ -258,7 +258,7 @@ async def queue(ctx, *, query):
         if query in carmelSongs:
             if ctx.voice_client.is_playing():
                 queuelist.append(query)
-                Queue_infile = os.path.isdir("/Queue")
+                Queue_infile = os.path.isdir("./Queue")
                 if Queue_infile is False:
                     os.mkdir("Queue")
                     print("Directory created.")
@@ -273,7 +273,7 @@ async def queue(ctx, *, query):
                         add_queue = False
                         queues[q_num] = q_num
 
-                queue_path = os.path.abspath(os.path.realpath("Queue") + f"\song{q_num}.%(ext)s")
+                queue_path = os.path.abspath(os.path.realpath("Queue") + f"\\song{q_num}.%(ext)s")
 
                 ydl_opts = {
                     'format': 'bestaudio/best',
