@@ -1,6 +1,7 @@
 import discord
 from discord.ext import commands
 
+import subprocess
 
 import shutil
 import youtube_dl
@@ -16,6 +17,7 @@ import ffmpeg
 
 import random
 
+queuelist = []
 
 
 carmelSongs = {
@@ -87,6 +89,45 @@ quotes = [
 
 #sending the quote
 
+def check_queue(voice):
+    Queue_infile = os.path.isdir("./Queue")
+    if Queue_infile is True:
+        DIR = os.path.abspath(os.path.realpath("Queue"))
+        length = len(os.listdir(DIR))
+        still_q = length - 1
+        try:
+            first_file = os.listdir(DIR)[0]
+        except:
+            print("No more queued song(s)\n")
+            queues.clear()
+            return
+        main_location = os.path.dirname(os.path.realpath(__file__))
+        song_path = os.path.abspath(os.path.realpath("Queue") + "\\" + first_file)
+        if length != 0:
+            print("Song done, playing next queued\n")
+            print(f"Songs still in queue: {still_q}")
+            song_there = os.path.isfile("song.mp3")
+            if song_there:
+                os.remove("song.mp3")
+            shutil.move(song_path, main_location)
+            for file in os.listdir("./"):
+                if file.endswith(".mp3"):
+                    os.rename(file, 'song.mp3')
+
+            voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue(voice))
+            voice.source = discord.PCMVolumeTransformer(voice.source)
+            voice.source.volume = 0.40
+            queuelist.pop(-1)
+
+        else:
+            queues.clear()
+            return
+
+    else:
+        queues.clear()
+        queuelist.clear()
+        print("No songs were queued before the ending of the last song\n")
+
 
 
 
@@ -121,98 +162,72 @@ async def join(ctx, *, channel: discord.VoiceChannel):
 
 
 @client.command()
-async def play(ctx, query):
-    def check_queue():
-        Queue_infile = os.path.isdir("./Queue")
-        if Queue_infile is True:
-            DIR = os.path.abspath(os.path.realpath("Queue"))
-            length = len(os.listdir(DIR))
-            still_q = length - 1
-            try:
-                first_file = os.listdir(DIR)[0]
-            except:
-                print("No more queued song(s)\n")
-                queues.clear()
-                return
-            main_location = os.path.dirname(os.path.realpath(__file__))
-            song_path = os.path.abspath(os.path.realpath("Queue") + "\\" + first_file)
-            if length != 0:
-                print("Song done, playing next queued\n")
-                print(f"Songs still in queue: {still_q}")
+async def play(ctx, *, query):
+    
+
+
+    if ctx.voice_client is not None:
+        if not ctx.voice_client.is_playing():
+            if query in carmelSongs:
+
                 song_there = os.path.isfile("song.mp3")
-                if song_there:
-                    os.remove("song.mp3")
-                shutil.move(song_path, main_location)
+                try:
+                    if song_there:
+                        os.remove("song.mp3")
+                        queues.clear()
+                        print("Removed old song file")
+                except PermissionError:
+                    print("Trying to delete song file, but it's being played")
+                    await ctx.send("ERROR: Music playing")
+                    return
+
+
+                Queue_infile = os.path.isdir("./Queue")
+                try:
+                    Queue_folder = "./Queue"
+                    if Queue_infile is True:
+                        print("Removed old Queue Folder")
+                        shutil.rmtree(Queue_folder)
+                except:
+                    print("No old Queue folder")
+
+                await ctx.send("Getting everything ready now")
+
+                voice = ctx.voice_client
+
+                ydl_opts = {
+                    'format': 'bestaudio/best',
+                    'quiet': True,
+                    'postprocessors': [{
+                        'key': 'FFmpegExtractAudio',
+                        'preferredcodec': 'mp3',
+                        'preferredquality': '192',
+                    }],
+                }
+
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    print("Downloading audio now\n")
+                    ydl.download([carmelSongs[query]])
+
                 for file in os.listdir("./"):
                     if file.endswith(".mp3"):
-                        os.rename(file, 'song.mp3')
+                        name = file
+                        print(f"Renamed File: {file}\n")
+                        os.rename(file, "song.mp3")
 
-                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
+                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue(ctx.voice_client))
                 voice.source = discord.PCMVolumeTransformer(voice.source)
                 voice.source.volume = 0.40
 
+                nname = name.rsplit("-", 2)
+                await ctx.send(f"Playing: {nname[0]}")
+                print("playing\n")
             else:
-                queues.clear()
-                return
-
+                await ctx.send("Not a valid Cal COombs song. Make sure the first letter is capitalized.")
         else:
-            queues.clear()
-            print("No songs were queued before the ending of the last song\n")
-
-
-
-    song_there = os.path.isfile("song.mp3")
-    try:
-        if song_there:
-            os.remove("song.mp3")
-            queues.clear()
-            print("Removed old song file")
-    except PermissionError:
-        print("Trying to delete song file, but it's being played")
-        await ctx.send("ERROR: Music playing")
-        return
-
-
-    Queue_infile = os.path.isdir("./Queue")
-    try:
-        Queue_folder = "./Queue"
-        if Queue_infile is True:
-            print("Removed old Queue Folder")
-            shutil.rmtree(Queue_folder)
-    except:
-        print("No old Queue folder")
-
-    await ctx.send("Getting everything ready now")
-
-    voice = ctx.voice_client
-
-    ydl_opts = {
-        'format': 'bestaudio/best',
-        'quiet': True,
-        'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-    }
-
-    with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-        print("Downloading audio now\n")
-        ydl.download([carmelSongs[query]])
-
-    for file in os.listdir("./"):
-        if file.endswith(".mp3"):
-            name = file
-            print(f"Renamed File: {file}\n")
-            os.rename(file, "song.mp3")
-
-    voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
-    voice.source = discord.PCMVolumeTransformer(voice.source)
-    voice.source.volume = 0.40
-
-    nname = name.rsplit("-", 2)
-    await ctx.send(f"Playing: {nname[0]}")
-    print("playing\n")
+            await ctx.send("Please use !queue instead.")
+    else:
+        await ctx.send("Use !join [channel_name_here] to make the bot join a channel!")
 
         
 
@@ -221,8 +236,12 @@ async def play(ctx, query):
 
 @client.command()
 async def viewqueue(ctx):
-    for i in queues.items():
-        await ctx.send(i)
+
+    if queuelist:
+        for i in queuelist:
+            await ctx.send(i)
+    else:
+        await ctx.send("No queue currently.")
 
 @client.command()
 async def viewplayers(ctx):
@@ -231,64 +250,99 @@ async def viewplayers(ctx):
 
 
 @client.command()
-async def queue(ctx, query):
-    if query in carmelSongs:
-        Queue_infile = os.path.isdir("./Queue")
-        if Queue_infile is False:
-            os.mkdir("Queue")
-        DIR = os.path.abspath(os.path.realpath("Queue"))
-        q_num = len(os.listdir(DIR))
-        q_num += 1
-        add_queue = True
-        while add_queue:
-            if q_num in queues:
+async def queue(ctx, *, query):
+    if ctx.voice_client:
+        if query in carmelSongs:
+            if ctx.voice_client.is_playing():
+                queuelist.append(query)
+                Queue_infile = os.path.isdir("./Queue")
+                if Queue_infile is False:
+                    os.mkdir("Queue")
+                DIR = os.path.abspath(os.path.realpath("Queue"))
+                q_num = len(os.listdir(DIR))
                 q_num += 1
+                add_queue = True
+                while add_queue:
+                    if q_num in queues:
+                        q_num += 1
+                    else:
+                        add_queue = False
+                        queues[q_num] = q_num
+
+                queue_path = os.path.abspath(os.path.realpath("Queue") + f"\song{q_num}.%(ext)s")
+
+                ydl_opts = {
+                    'format': 'bestaudio/best',
+                    'quiet': True,
+                    'outtmpl': queue_path,
+                    'postprocessors': [{
+                    'key': 'FFmpegExtractAudio',
+                    'preferredcodec': 'mp3',
+                    'preferredquality': '192',
+                }],
+            }
+
+                with youtube_dl.YoutubeDL(ydl_opts) as ydl:
+                    print("Downloading audio now\n")
+                    ydl.download([carmelSongs[query]])
+                    
+                await ctx.send("Adding song " + str(q_num) + " to the queue")
+                print("Song added to queue\n")
             else:
-                add_queue = False
-                queues[q_num] = q_num
-
-        queue_path = os.path.abspath(os.path.realpath("Queue") + f"\song{q_num}.%(ext)s")
-
-        ydl_opts = {
-            'format': 'bestaudio/best',
-            'quiet': True,
-            'outtmpl': queue_path,
-            'postprocessors': [{
-            'key': 'FFmpegExtractAudio',
-            'preferredcodec': 'mp3',
-            'preferredquality': '192',
-        }],
-    }
-
-        with youtube_dl.YoutubeDL(ydl_opts) as ydl:
-            print("Downloading audio now\n")
-            ydl.download([carmelSongs[query]])
-            
-        await ctx.send("Adding song " + str(q_num) + " to the queue")
-        print("Song added to queue\n")
-
-
-
-
-
-
-    
-
-
-
-        
-        
-
+                await ctx.send("Please use !play instead.")
+        else:
+            await ctx.send("Make sure the song you request is from Cal Combs, and that the first letter is capitalized.")
+    else:
+        await ctx.send("You must be in a voice channel.")
     
 
 
 @client.command()
 async def stop(ctx):
-    await ctx.voice_client.disconnect()
     queues.clear()
-    Queue_infile = os.path.isdir("./Queue")
-    if Queue_infile is True:
-            shutil.rmtree("Queue")
+    queuelist.clear()
+
+    if ctx.voice_client is not None:
+        ctx.voice_client.stop()
+
+
+        await ctx.voice_client.disconnect()
+
+        
+        Queue_infile = os.path.isdir("/Queue")
+        if Queue_infile is True:
+                shutil.rmtree("Queue")
+        else:
+            print("no directory")
+        
+        myDir = os.getcwd()
+        test = os.listdir(myDir)
+        mysuffixes = (".mp3", ".m4a")
+        for item in test:
+            if item.endswith(mysuffixes):
+                os.remove(os.path.join(myDir, item))
+
+
+
+    
+    
+
+
+@client.command()
+async def skip(ctx):
+    ctx.voice_client.stop()
+    mydir = os.getcwd()
+    suffixes = (".mp3", ".m4a")
+    test = os.listdir(mydir)
+
+    for item in test:
+        if item.endswith(suffixes):
+            os.remove(os.path.join(mydir, item))
+    
+    check_queue(ctx.voice_client)
+    ctx.send("Song skipped.")
+
+
 
 
 

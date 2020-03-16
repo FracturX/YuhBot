@@ -1,7 +1,9 @@
 discord
+asyncio
 PyNaCl
 opus_api
 youtube_dl
 ffmpeg
+
 
 
