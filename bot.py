@@ -126,7 +126,7 @@ async def join(ctx, *, channel: discord.VoiceChannel):
 async def play(ctx, *, query):
 
     def check_queue():
-        Queue_infile = os.path.isdir("./Queue")
+        Queue_infile = os.path.isdir("/Queue")
         if Queue_infile is True:
             DIR = os.path.abspath(os.path.realpath("Queue"))
             length = len(os.listdir(DIR))
@@ -258,9 +258,10 @@ async def queue(ctx, *, query):
         if query in carmelSongs:
             if ctx.voice_client.is_playing():
                 queuelist.append(query)
-                Queue_infile = os.path.isdir("./Queue")
+                Queue_infile = os.path.isdir("/Queue")
                 if Queue_infile is False:
                     os.mkdir("Queue")
+                    print("Directory created.")
                 DIR = os.path.abspath(os.path.realpath("Queue"))
                 q_num = len(os.listdir(DIR))
                 q_num += 1
@@ -344,6 +345,10 @@ async def skip(ctx):
 
 
     await ctx.send("lol that command don't exist noob")
+
+@client.command()
+async def troubleshoot(ctx):
+    for file in os.listdir("Queue"):
 
 
 
