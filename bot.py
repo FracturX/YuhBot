@@ -273,7 +273,7 @@ async def queue(ctx, *, query):
                         add_queue = False
                         queues[q_num] = q_num
 
-                queue_path = os.path.abspath(os.path.realpath("Queue") + f"\song{q_num}.%(ext)s")
+                queue_path = os.path.abspath(os.path.realpath("Queue") + f"/song{q_num}.%(ext)s")
                 print(str(queue_path))
                 ydl_opts = {
                     'format': 'bestaudio/best',
