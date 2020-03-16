@@ -4,6 +4,6 @@ PyNaCl
 opus_api
 youtube_dl
 ffmpeg
-
+shutil
 
 
