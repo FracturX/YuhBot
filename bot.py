@@ -273,8 +273,8 @@ async def queue(ctx, *, query):
                         add_queue = False
                         queues[q_num] = q_num
 
-                queue_path = os.path.abspath(os.path.realpath("Queue") + f"\\song{q_num}.%(ext)s")
-
+                queue_path = os.path.abspath(os.path.realpath("Queue") + f"\song{q_num}.%(ext)s")
+                print(str(queue_path))
                 ydl_opts = {
                     'format': 'bestaudio/best',
                     'quiet': True,
@@ -348,9 +348,9 @@ async def skip(ctx):
 
 @client.command()
 async def troubleshoot(ctx):
-    for pee in os.listdir("Queue"):
-        print(pee)
-        await ctx.send(pee)
+    for item in os.listdir("Queue"):
+        print(item)
+        await ctx.send(item)
 
 
 
