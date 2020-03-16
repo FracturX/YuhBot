@@ -58,6 +58,7 @@ client = commands.Bot(command_prefix = "!")
 async def on_ready():
     print("bot is ready")
 
+cache = []
 players = {}
 queues = {}
 
@@ -157,18 +158,23 @@ async def play(ctx, *, query):
                 voice.source = discord.PCMVolumeTransformer(voice.source)
                 voice.source.volume = 0.40
                 poopy = queuelist.pop(0)
-                await ctx.send(f"Now playing: {poopy}")
+                cache.append(poopy)
+    
 
             else:
                 queues.clear()
                 queuelist.clear()
+                cache.clear()
                 return
 
         else:
             queues.clear()
             queuelist.clear()
+            cache.clear()
             print("No songs were queued before the ending of the last song\n")
 
+    if ctx.voice_client.is_playing():
+        await ctx.send(f"Now playing: {cache[-1]}")
 
 
 
@@ -306,6 +312,7 @@ async def queue(ctx, *, query):
 async def stop(ctx):
     queues.clear()
     queuelist.clear()
+    cache.clear()
 
     if ctx.voice_client is not None:
         ctx.voice_client.stop()
