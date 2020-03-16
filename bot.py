@@ -150,7 +150,9 @@ async def play(ctx, *, query):
                     if file.endswith(".mp3"):
                         os.rename(file, 'song.mp3')
 
-                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue(voice))
+                voice = ctx.voice_client
+
+                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
                 voice.source = discord.PCMVolumeTransformer(voice.source)
                 voice.source.volume = 0.40
                 queuelist.pop(-1)
@@ -216,7 +218,7 @@ async def play(ctx, *, query):
                         print(f"Renamed File: {file}\n")
                         os.rename(file, "song.mp3")
 
-                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue(ctx.voice_client))
+                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
                 voice.source = discord.PCMVolumeTransformer(voice.source)
                 voice.source.volume = 0.40
 
@@ -339,8 +341,49 @@ async def skip(ctx):
     for item in test:
         if item.endswith(suffixes):
             os.remove(os.path.join(mydir, item))
+
+    def check_queue():
+        Queue_infile = os.path.isdir("./Queue")
+        if Queue_infile is True:
+            DIR = os.path.abspath(os.path.realpath("Queue"))
+            length = len(os.listdir(DIR))
+            still_q = length - 1
+            try:
+                first_file = os.listdir(DIR)[0]
+            except:
+                print("No more queued song(s)\n")
+                queues.clear()
+                return
+            main_location = os.path.dirname(os.path.realpath(__file__))
+            song_path = os.path.abspath(os.path.realpath("Queue") + "\\" + first_file)
+            if length != 0:
+                print("Song done, playing next queued\n")
+                print(f"Songs still in queue: {still_q}")
+                song_there = os.path.isfile("song.mp3")
+                if song_there:
+                    os.remove("song.mp3")
+                shutil.move(song_path, main_location)
+                for file in os.listdir("./"):
+                    if file.endswith(".mp3"):
+                        os.rename(file, 'song.mp3')
+                
+                voice = ctx.voice_client
+
+                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
+                voice.source = discord.PCMVolumeTransformer(voice.source)
+                voice.source.volume = 0.40
+                queuelist.pop(-1)
+
+            else:
+                queues.clear()
+                return
+
+        else:
+            queues.clear()
+            queuelist.clear()
+            print("No songs were queued before the ending of the last song\n")
     
-    check_queue(ctx.voice_client)
+    check_queue()
     ctx.send("Song skipped.")
 
 
