@@ -159,6 +159,8 @@ async def play(ctx, *, query):
                 voice.source.volume = 0.40
                 poopy = queuelist.pop(0)
                 cache.append(poopy)
+                
+                ctx.send(f"Now playing: {cache[-1]}")
     
 
             else:
@@ -173,8 +175,7 @@ async def play(ctx, *, query):
             cache.clear()
             print("No songs were queued before the ending of the last song\n")
 
-    if ctx.voice_client.is_playing():
-        await ctx.send(f"Now playing: {cache[-1]}")
+
 
 
 
