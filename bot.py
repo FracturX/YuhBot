@@ -156,7 +156,8 @@ async def play(ctx, *, query):
                 voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
                 voice.source = discord.PCMVolumeTransformer(voice.source)
                 voice.source.volume = 0.40
-                queuelist.pop(-1)
+                poopy = queuelist.pop(0)
+                await ctx.send(f"Now playing: {poopy}")
 
             else:
                 queues.clear()
@@ -344,7 +345,7 @@ async def skip(ctx):
             os.remove(os.path.join(mydir, item))
 
 
-    await ctx.send("lol that command don't exist noob")
+    await ctx.send("smh imagine not liking a cal combs song. here u go hater")
 
 @client.command()
 async def troubleshoot(ctx):
