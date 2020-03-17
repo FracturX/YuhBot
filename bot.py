@@ -21,6 +21,8 @@ queuelist = []
 
 
 carmelSongs = {
+    "CarmelAlbum": "https://www.youtube.com/watch?v=s0_8THQ9LI4&list=OLAK5uy_kZRJb7_UvI4fOA8P9h2zE-ORzj3hDCyN0",
+    "505Album": "https://www.youtube.com/watch?v=ztzvlpPY1_w&list=OLAK5uy_lNbNFl4zs9hhKriMWSxZ4dsbByQUxVWrA",
     "Survival": "https://youtu.be/s0_8THQ9LI4",
     "Maxima": "https://youtu.be/KaidiP1giQ8",
     "Man Up": "https://youtu.be/_zgHuXGBKNQ",
@@ -187,7 +189,7 @@ async def play(ctx, *, query):
 
     if ctx.voice_client is not None:
         if query in carmelSongs:
-            await ctx.send("Please be patient while I download " + query + ".")
+            await ctx.send("Please be patient while I download " + query + ". If you played an album, please be patient while I download all of the songs.")
 
             song_there = os.path.isfile("song.mp3")
             try:
@@ -273,7 +275,7 @@ async def queue(ctx, *, query):
         if query in carmelSongs:
             if ctx.voice_client.is_playing():
                 queuelist.append(query)
-                await ctx.send("Adding " + query + " to the queue.")
+                await ctx.send("Adding " + query + " to the queue. If you queued an album, please be extra patient.")
                 Queue_infile = os.path.isdir("./Queue")
                 if Queue_infile is False:
                     os.mkdir("Queue")
