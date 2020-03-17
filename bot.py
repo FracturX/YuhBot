@@ -129,7 +129,7 @@ async def currentMusic(ctx):
 @client.command()
 async def play(ctx, *, query):
 
-    async def check_queue():
+    def check_queue():
         Queue_infile = os.path.isdir("./Queue")
         if Queue_infile is True:
             DIR = os.path.abspath(os.path.realpath("Queue"))
@@ -159,7 +159,7 @@ async def play(ctx, *, query):
                         os.rename(file, 'song.mp3')
 
 
-                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: await check_queue())
+                voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
                 voice.source = discord.PCMVolumeTransformer(voice.source)
                 voice.source.volume = 0.40
                 poopy = queuelist.pop(0)
@@ -234,7 +234,7 @@ async def play(ctx, *, query):
                     print(f"Renamed File: {file}\n")
                     os.rename(file, "song.mp3")
 
-            voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: await check_queue())
+            voice.play(discord.FFmpegPCMAudio("song.mp3"), after=lambda e: check_queue())
             voice.source = discord.PCMVolumeTransformer(voice.source)
             voice.source.volume = 0.40
 
