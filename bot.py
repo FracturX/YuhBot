@@ -21,8 +21,8 @@ queuelist = []
 
 
 carmelSongs = {
-    "CarmelAlbum": "https://www.youtube.com/watch?v=s0_8THQ9LI4&list=OLAK5uy_kZRJb7_UvI4fOA8P9h2zE-ORzj3hDCyN0",
-    "505Album": "https://www.youtube.com/watch?v=ztzvlpPY1_w&list=OLAK5uy_lNbNFl4zs9hhKriMWSxZ4dsbByQUxVWrA",
+    "CarmelAlbum": "https://www.youtube.com/playlist?list=OLAK5uy_kZRJb7_UvI4fOA8P9h2zE-ORzj3hDCyN0",
+    "505Album": "https://www.youtube.com/playlist?list=OLAK5uy_lNbNFl4zs9hhKriMWSxZ4dsbByQUxVWrA",
     "Survival": "https://youtu.be/s0_8THQ9LI4",
     "Maxima": "https://youtu.be/KaidiP1giQ8",
     "Man Up": "https://youtu.be/_zgHuXGBKNQ",
@@ -188,7 +188,7 @@ async def play(ctx, *, query):
 
 
     if ctx.voice_client is not None:
-        if query in carmelSongs:
+        if query in carmelSongs and query != "505Album" and query != "CarmelAlbum":
             await ctx.send("Please be patient while I download " + query + ". If you played an album, please be patient while I download all of the songs.")
 
             song_there = os.path.isfile("song.mp3")
@@ -244,7 +244,7 @@ async def play(ctx, *, query):
             await ctx.send(f"Playing: {nname[0]}")
             print("playing\n")
         else:
-                await ctx.send("Not a valid Cal Combs song. Make sure the first letter is capitalized.")
+                await ctx.send("Not a valid Cal Combs song. If you played an album, play another song first and then do !queue [album name here]. Thank you for your cooperation!")
     
     else:
         await ctx.send("Use !join [channel_name_here] to make the bot join a channel!")
