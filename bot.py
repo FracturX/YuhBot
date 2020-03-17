@@ -120,6 +120,9 @@ async def join(ctx, *, channel: discord.VoiceChannel):
 
     await channel.connect()
 
+async def currentMusic(ctx):
+    await ctx.send(f"Now playing: {cache[-1]}")
+
 
 
 
@@ -132,8 +135,10 @@ async def play(ctx, *, query):
             DIR = os.path.abspath(os.path.realpath("Queue"))
             length = len(os.listdir(DIR))
             still_q = length - 1
+            listdirs = os.listdir(DIR)
+            sorted_DIR = sorted(listdirs)
             try:
-                first_file = os.listdir(DIR)[0]
+                first_file = sorted_DIR[0]
             except:
                 print("No more queued song(s)\n")
                 queues.clear()
@@ -159,8 +164,9 @@ async def play(ctx, *, query):
                 voice.source.volume = 0.40
                 poopy = queuelist.pop(0)
                 cache.append(poopy)
+                currentMusic(ctx)
                 
-                ctx.send(f"Now playing: {cache[-1]}")
+                
     
 
             else:
