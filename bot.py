@@ -164,7 +164,7 @@ async def play(ctx, *, query):
                 voice.source.volume = 0.40
                 poopy = queuelist.pop(0)
                 cache.append(poopy)
-                await ctx.send(f"Now Playing: {cache[-1]}.")
+
                 
                 
     
