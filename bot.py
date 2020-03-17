@@ -187,6 +187,7 @@ async def play(ctx, *, query):
 
     if ctx.voice_client is not None:
         if query in carmelSongs:
+            await ctx.send("Please be patient while I download " + query + ".")
 
             song_there = os.path.isfile("song.mp3")
             try:
@@ -241,7 +242,7 @@ async def play(ctx, *, query):
             await ctx.send(f"Playing: {nname[0]}")
             print("playing\n")
         else:
-                await ctx.send("Not a valid Cal COombs song. Make sure the first letter is capitalized.")
+                await ctx.send("Not a valid Cal Combs song. Make sure the first letter is capitalized.")
     
     else:
         await ctx.send("Use !join [channel_name_here] to make the bot join a channel!")
@@ -272,6 +273,7 @@ async def queue(ctx, *, query):
         if query in carmelSongs:
             if ctx.voice_client.is_playing():
                 queuelist.append(query)
+                await ctx.send("Adding " + query + " to the queue.")
                 Queue_infile = os.path.isdir("./Queue")
                 if Queue_infile is False:
                     os.mkdir("Queue")
@@ -304,7 +306,7 @@ async def queue(ctx, *, query):
                     print("Downloading audio now\n")
                     ydl.download([carmelSongs[query]])
                     
-                await ctx.send("Adding song " + str(q_num) + " to the queue")
+                await ctx.send("Added " + queuelist[-1] + " to the queue")
                 print("Song added to queue\n")
             else:
                 await ctx.send("Please use !play instead.")
