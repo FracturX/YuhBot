@@ -129,7 +129,7 @@ async def currentMusic(ctx):
 @client.command()
 async def play(ctx, *, query):
 
-    def check_queue():
+    async def check_queue():
         Queue_infile = os.path.isdir("./Queue")
         if Queue_infile is True:
             DIR = os.path.abspath(os.path.realpath("Queue"))
@@ -164,7 +164,7 @@ async def play(ctx, *, query):
                 voice.source.volume = 0.40
                 poopy = queuelist.pop(0)
                 cache.append(poopy)
-                currentMusic(ctx)
+                await ctx.send(f"Now Playing: {cache[-1]}.")
                 
                 
     
