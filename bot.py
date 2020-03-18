@@ -112,7 +112,9 @@ quotes = [
 
 
 
-
+@client.command()
+async def lyrics(ctx):
+    await ctx.send("Here is the link for all of the lyrics in Carmel. 505 lyrics are currently being transcribed by our team of lyricists. https://drive.google.com/open?id=1U8kifyk3ILgN7_Z9O_y4JGM5oKahbFLZ")
 
 @client.command()
 async def quote(ctx):
