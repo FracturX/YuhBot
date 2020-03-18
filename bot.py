@@ -1,5 +1,6 @@
 import discord
 from discord.ext import commands
+import time
 
 import subprocess
 
@@ -54,7 +55,7 @@ carmelSongs = {
 
 }
 
-client = commands.Bot(command_prefix = "!")
+client = commands.Bot(command_prefix = "!", self_bot = True)
 
 @client.event
 async def on_ready():
@@ -404,6 +405,39 @@ skydream =    "Skydream"
 fb =    "Free Bird" 
 carmel =    "Carmel"
 
+async def queueforme(ctx, query):
+    if query == "Carmel":
+        await ctx.send("!queue Survival")
+        time.sleep(7)
+        await ctx.send("!queue Maxima")
+        time.sleep(7)
+        await ctx.send("!queue Man Up")
+        time.sleep(7)
+        await ctx.send("!queue Parachute")
+        time.sleep(7)
+        await ctx.send("!queue Cowboy Bebop")
+        time.sleep(7)
+        await ctx.send("!queue Backpack")
+        time.sleep(7)
+        await ctx.send("!queue Heart")
+        time.sleep(7)
+        await ctx.send("!queue Roundabouts")
+        time.sleep(7)
+        await ctx.send("!queue Conditioned")
+        time.sleep(7)
+        await ctx.send("!queue Perspectives")
+        time.sleep(7)
+        await ctx.send("!queue Sunshine")
+        time.sleep(7)
+        await ctx.send("!queue Peace")
+        time.sleep(7)
+        await ctx.send("!queue Fight or Flight")
+        time.sleep(7)
+        await ctx.send("!queue Skydream")
+        time.sleep(7)
+        await ctx.send("!queue Free Bird")
+        time.sleep(7)
+        await ctx.send("!queue Carmel")
 
 
 
