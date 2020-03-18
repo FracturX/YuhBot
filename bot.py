@@ -72,7 +72,7 @@ carmelSongs = {
 
 }
 
-client = commands.Bot(command_prefix = "!", help_command=True)
+client = commands.Bot(command_prefix = "!")
 
 @client.event
 async def on_ready():
