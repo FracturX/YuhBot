@@ -22,8 +22,8 @@ queuelist = []
 
 
 carmelSongs = {
-    "CarmelAlbum": "https://www.youtube.com/playlist?list=OLAK5uy_kZRJb7_UvI4fOA8P9h2zE-ORzj3hDCyN0",
-    "505Album": "https://www.youtube.com/playlist?list=OLAK5uy_lNbNFl4zs9hhKriMWSxZ4dsbByQUxVWrA",
+    "CarmelAlbum": "https://youtu.be/JcelGsX2SPg",
+    "505Album": "https://youtu.be/RJo2poLvR40",
     "Survival": "https://youtu.be/s0_8THQ9LI4",
     "Maxima": "https://youtu.be/KaidiP1giQ8",
     "Man Up": "https://youtu.be/_zgHuXGBKNQ",
@@ -52,10 +52,27 @@ carmelSongs = {
     "You and I": "https://youtu.be/o-OmTNl7pYs",
     "Oh Well": "https://youtu.be/8Dgx5OlDhrQ",
     "Flight Risk": "https://youtu.be/E2g7R4XBzms",
+    "lofi Survival": "https://www.youtube.com/watch?v=wLeR7RAuBxI",
+    "lofi Maxima": "https://www.youtube.com/watch?v=vbJshzVPtqE",
+    "lofi Man Up": "https://www.youtube.com/watch?v=a4re3kTQiV0",
+    "lofi Parachute": "https://www.youtube.com/watch?v=wHwhAmk-aHM",
+    "lofi Cowboy Bebop": "https://www.youtube.com/watch?v=dtJj-2Pd5dM",
+    "lofi Backpack": "https://www.youtube.com/watch?v=1VTa2oR2gvQ",
+    "lofi Heart": "https://www.youtube.com/watch?v=NyU6UoEQY28",
+    "lofi Roundabouts": "https://www.youtube.com/watch?v=M74ktVvhoWI",
+    "lofi Conditioned": "https://www.youtube.com/watch?v=pl3ePnufosE",
+    "lofi Perspectives": "https://www.youtube.com/watch?v=isKeLCFMuyI",
+    "lofi Sunshine:": "https://www.youtube.com/watch?v=4h65fTr4fFY",
+    "lofi Peace:": "https://www.youtube.com/watch?v=NuKDH6NDIys",
+    "lofi Fight or Flight": "https://www.youtube.com/watch?v=j5XYNB5ryek",
+    "lofi Skydream": "https://www.youtube.com/watch?v=alJbA8hyVcU",
+    "lofi Free Bird": "https://youtu.be/IpxSYJgC_zA",
+    "lofi Carmel": "https://www.youtube.com/watch?v=08RDmCCSKlk",
+
 
 }
 
-client = commands.Bot(command_prefix = "!")
+client = commands.Bot(command_prefix = "!", help_command=True)
 
 @client.event
 async def on_ready():
