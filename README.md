@@ -1,5 +1,2 @@
 # YuhBot
-Cal Combs Tool
-
-
-Kinda stupid ngl bro.
+First coding project
